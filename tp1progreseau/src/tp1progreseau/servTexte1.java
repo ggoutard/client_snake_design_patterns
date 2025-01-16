@@ -8,7 +8,7 @@ public class servTexte1 {
 		ServerSocket ecoute;
 		Socket so;
 		BufferedReader entree;
-		DataOutputStream sortie;
+		PrintWriter sortie;
 		String ch; // la chaîne reçue
 		if (argu.length == 1) {
 			try {
@@ -18,10 +18,10 @@ public class servTexte1 {
 				while (true) {// le serveur va attendre qu’une connexion arrive
 					so = ecoute.accept();
 					entree = new BufferedReader(new InputStreamReader(so.getInputStream()));
-					sortie = new DataOutputStream (so.getOutputStream());
+					sortie = new PrintWriter (so.getOutputStream());
 					ch = entree.readLine(); // on lit ce qui arrive
 					System.out.println("on a reçu : |"+ch+"|");
-					sortie.writeInt(ch.length()); // on renvoie la longueur de la chaîne
+					sortie.write(ch.length()); // on renvoie la longueur de la chaîne
 					so.close();
 					System.out.println("on a envoyé : "+ch.length()+" et on a fermé la connexion");
 				}

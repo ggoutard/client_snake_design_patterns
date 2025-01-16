@@ -6,7 +6,7 @@ import java.io.*;
 public class cliTexte1 {
 	public static void main(String[] argu) {
 		Socket so;
-		DataInputStream entree;
+		BufferedReader entree;
 		PrintWriter sortie;
 		String s; // le serveur
 		int p; // le port de connexion
@@ -19,9 +19,9 @@ public class cliTexte1 {
 			try{// on connecte un socket
 				so = new Socket(s, p);
 				sortie = new PrintWriter(so.getOutputStream(), true);
-				entree = new DataInputStream(so.getInputStream());
+				entree = new BufferedReader(new InputStreamReader(so.getInputStream()));
 				sortie.println(ch); // on écrit la chaîne et le newline dans le canal de sortie
-				l = entree.readInt(); // on lit l’entier qui arrive
+				l = entree.read(); // on lit l’entier qui arrive
 				System.out.println("D’après le serveur la longueur de "+ch+" est "+l);
 				so.close(); // on ferme la connexion
 			} catch(UnknownHostException e) {System.out.println(e);}
