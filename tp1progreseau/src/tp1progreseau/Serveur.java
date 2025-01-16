@@ -3,64 +3,46 @@ package tp1progreseau;
 import java.net.*;
 import java.io.*;
 
-public class Client {
-	
-	private String adresse;
-	private int port;
-	private String currentMessage;
-	private String postMessage;
-	private int lengthCurrentMessage;
-	private Socket socket;
-	
-	public Client(String adresse) {
-		this.adresse = adresse;
-	
-	}
-	
-	public void connect(int port) {
-		this.port = port;
-	
-		try
-		{
-			this.socket = new Socket(adresse, this.port);
-			
-			System.out.println("Connecté");
-		} 
-		catch(UnknownHostException e) {System.out.println(e);}
-		catch (IOException e) {System.out.println("Aucun serveur n’est rattaché au port ");}
-	}
-	
-	public void disconnect() {
-		try
-		{
-			this.socket.close();
-		} 
-		catch(UnknownHostException e) {System.out.println(e);}
-		catch (IOException e) {System.out.println("Le socket n'est pas connecté");}
-	}
-	
-	public void sendMessage(String chaine) {
-	    BufferedReader entree;
-	    PrintWriter sortie;
+public class Serveur {
+    private int port; 
+    private ServerSocket ecoute;
 
-	    try {
-	        sortie = new PrintWriter(this.socket.getOutputStream(), true);
-	        entree = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-	        sortie.println(chaine); 
-	        this.lengthCurrentMessage = entree.read();
-	    } catch (IOException e) {
-	        System.out.println("Aucun serveur n’est rattaché au port");
-	    }
-	}
-	
-	
+    public Serveur(int port) {
+        this.port = port;
+    }
+
+    public void run() {
+        try {
+            ecoute = new ServerSocket(port);
+            System.out.println("Serveur mis en place sur le port " + port);
+
+            while (true) {
+                try {
+                	Socket so = ecoute.accept();
+                	BufferedReader entree = new BufferedReader(new InputStreamReader(so.getInputStream()));
+                    PrintWriter sortie = new PrintWriter(so.getOutputStream());
+                    String ch = entree.readLine();
+                    System.out.println("On a reçu : |" + ch + "|");
+                    sortie.write(ch.length());
+                    sortie.flush();
+                    System.out.println("On a envoyé : " + ch.length() + " et on a fermé la connexion");
+                } catch (IOException e) {
+                	System.out.println("Problème\n" + e);
+                }
+            }
+
+       } catch (IOException e) {
+    	   System.out.println("Problème\n" + e);
+       }
+    }
+    
     public static void main(String[] argu) {
 		
-    	Client c = new Client("127.0.0.1");
-		c.connect(2501);
-		c.sendMessage("hello world");
-		c.disconnect();
+
+		Serveur s = new Serveur(2501);
+		s.run();
 		
 	}
-
-} 
+    
+	
+}
