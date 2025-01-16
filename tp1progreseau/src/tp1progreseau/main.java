@@ -1,13 +1,9 @@
 package tp1progreseau;
 
 import tp1progreseau.Serveur;
+import tp1progreseau.Client;
+
 
 public class main {
-	public static void main(String[] argu) {
-		
-		Serveur s = new Serveur(2500);
-		
-		s.run();
-		
-	}
+
 }

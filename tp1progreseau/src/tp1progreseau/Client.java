@@ -4,66 +4,52 @@ import java.net.*;
 import java.io.*;
 
 public class Client {
-	
-	private String adresse;
-	private int port;
-	private String currentMessage;
-	private String postMessage;
-	private int lengthCurrentMessage;
-	private Socket socket;
-	
-	public Client(String adresse) {
-		this.adresse = adresse;
-	
-	}
-	
-	public void connect(int port) {
-		
-		this.port = port;
+    private String adresse;
+    private int port;
+    private Socket socket;
+    private BufferedReader entree;
+    private PrintWriter sortie;
 
-		this.sendMessage("connexion");
-		System.out.println("Connecté");
-		
-	}
-	
-	public void disconnect() {
-		try
-		{
-			this.socket.close();
-		} 
-		catch(UnknownHostException e) {System.out.println(e);}
-		catch (IOException e) {System.out.println("Le socket n'est pas connecté");}
-	}
-	
-	public void sendMessage(String chaine) {
-	    BufferedReader entree;
-	    PrintWriter sortie;
+    public Client(String adresse) {
+        this.adresse = adresse;
+    }
 
-	    try {
-	    	this.socket = new Socket(this.adresse, this.port);
+    public void connect(int port) {
+        this.port = port;
+        try {
+            this.socket = new Socket(this.adresse, this.port);
+            this.sortie = new PrintWriter(this.socket.getOutputStream(), true);
+            this.entree = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+            System.out.println("Connecté");
+        } catch (IOException e) {
+            System.out.println("Aucun serveur n’est rattaché au port");
+        }
+    }
 
-	        sortie = new PrintWriter(this.socket.getOutputStream(), true);
-	        entree = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-	        sortie.println(chaine); 
-	        this.lengthCurrentMessage = entree.read();
-            System.out.println("Message envoyé : " + chaine + "\nLongueur reçue : " + this.lengthCurrentMessage);
+    public void disconnect() {
+        try {
+            this.socket.close();
+        } catch (IOException e) {
+            System.out.println("Le socket n'est pas connecté");
+        }
+    }
 
-	    } catch (IOException e) {
-	        System.out.println("Aucun serveur n’est rattaché au port");
-	    }
-	}
-	
-	
+    public void sendMessage(String chaine) {
+        try {
+            this.sortie.println(chaine);
+            String reponse = this.entree.readLine();
+            System.out.println("Message envoyé : " + chaine + "\nRéponse reçue : " + reponse);
+        } catch (IOException e) {
+            System.out.println("Aucun serveur n’est rattaché au port");
+        }
+    }
+
     public static void main(String[] argu) {
-		
-    	Client c = new Client("127.0.0.1");
-		c.connect(2501);
-		c.sendMessage("hello world");
-		c.sendMessage("Salut monde");
-		c.sendMessage("stop");
-		c.sendMessage("hello world");
-
-		
-	}
-
-} 
+        Client c = new Client("127.0.0.1");
+        c.connect(2501);
+        c.sendMessage("hello world");
+        c.sendMessage("Salut monde");
+        c.sendMessage("stop");
+        c.disconnect();
+    }
+}

@@ -2,47 +2,48 @@ package tp1progreseau;
 
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
 
 public class Serveur {
-    private int port; 
+    private int port;
     private ServerSocket ecoute;
+    private ArrayList<ClientHandler> clients;
 
     public Serveur(int port) {
         this.port = port;
+        this.clients = new ArrayList<>();
     }
 
     public void run() {
         try {
-            ecoute = new ServerSocket(port);
+            this.ecoute = new ServerSocket(port);
             System.out.println("Serveur mis en place sur le port " + port);
-            String chaine = "run" ;
-            while (!chaine.equals("stop")) {
-                try {
-                	Socket so = ecoute.accept();
-                	BufferedReader entree = new BufferedReader(new InputStreamReader(so.getInputStream()));
-                    PrintWriter sortie = new PrintWriter(so.getOutputStream());
-                    chaine = entree.readLine();
-                    System.out.println("On a reçu : |" + chaine + "|");
-                    sortie.write(chaine.length());
-                    sortie.flush();
-                    System.out.println("On a envoyé : " + chaine.length() + " et on a fermé la connexion");
-                } catch (IOException e) {
-                	System.out.println("Problème\n" + e);
-                }
+            
+            while (true) 
+            {
+                this.addClient( this.ecoute.accept());
+                
             }
-
-       } catch (IOException e) {
-    	   System.out.println("Problème\n" + e);
-       }
+            
+        } catch (IOException e) {
+            System.out.println("Serveur injoignable : " + e);
+        }
     }
     
-    public static void main(String[] argu) {
-		
+    public synchronized void addClient(Socket socket) {
+    	ClientHandler clientHandler = new ClientHandler(this,socket);
+        this.clients.add(clientHandler);
+        clientHandler.start();
+        
+    }
 
-		Serveur s = new Serveur(2501);
-		s.run();
-		
-	}
-    
-	
+    public synchronized void removeClient(ClientHandler clientHandler) {
+        this.clients.remove(clientHandler);
+        System.out.println("Client retiré : " + clientHandler);
+    }
+
+    public static void main(String[] argu) {
+        Serveur s = new Serveur(2501);
+        s.run();
+    }
 }
