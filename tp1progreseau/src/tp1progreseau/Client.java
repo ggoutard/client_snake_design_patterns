@@ -18,16 +18,12 @@ public class Client {
 	}
 	
 	public void connect(int port) {
+		
 		this.port = port;
-	
-		try
-		{
-			this.socket = new Socket(adresse, this.port);
-			
-			System.out.println("Connecté");
-		} 
-		catch(UnknownHostException e) {System.out.println(e);}
-		catch (IOException e) {System.out.println("Aucun serveur n’est rattaché au port ");}
+
+		this.sendMessage("connexion");
+		System.out.println("Connecté");
+		
 	}
 	
 	public void disconnect() {
@@ -44,10 +40,14 @@ public class Client {
 	    PrintWriter sortie;
 
 	    try {
+	    	this.socket = new Socket(this.adresse, this.port);
+
 	        sortie = new PrintWriter(this.socket.getOutputStream(), true);
 	        entree = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 	        sortie.println(chaine); 
 	        this.lengthCurrentMessage = entree.read();
+            System.out.println("Message envoyé : " + chaine);
+
 	    } catch (IOException e) {
 	        System.out.println("Aucun serveur n’est rattaché au port");
 	    }
@@ -59,7 +59,10 @@ public class Client {
     	Client c = new Client("127.0.0.1");
 		c.connect(2501);
 		c.sendMessage("hello world");
-		c.disconnect();
+		c.sendMessage("Salut monde");
+		c.sendMessage("stop");
+		c.sendMessage("hello world");
+
 		
 	}
 
