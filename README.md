@@ -1,20 +1,19 @@
-# Projet-programmation-reseau
+# Projet de programmation réseau
 
-exmeple : lettres dans mot
+Exemple : lettres dans un mot
 -> cours
 
-ex1 : plusieurs mots (tant que ! stop)
-ex2 : multiutilisateurs (simultanés)
+Ex1 : plusieurs mots (tant que ! stop)
+Ex2 : multi-utilisateurs (simultanés)
 
 ---
 
-ex3 : chat
+Ex3 : chat
 
-projet ( jackson) -> objet annotés  <-> json
+Projet (Jackson) -> objets annotés <-> JSON
 
-I/O compatibles
+I/O compatibles:
 - PrintWriter
 - BufferedReader
 
 Println
-     --
