@@ -46,7 +46,7 @@ public class Client {
 	        entree = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 	        sortie.println(chaine); 
 	        this.lengthCurrentMessage = entree.read();
-            System.out.println("Message envoyé : " + chaine);
+            System.out.println("Message envoyé : " + chaine + "\nLongueur reçue : " + this.lengthCurrentMessage);
 
 	    } catch (IOException e) {
 	        System.out.println("Aucun serveur n’est rattaché au port");
