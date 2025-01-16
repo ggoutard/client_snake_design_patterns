@@ -41,6 +41,12 @@ public class Serveur {
         this.clients.remove(clientHandler);
         System.out.println("Client retiré : " + clientHandler);
     }
+    	
+    public synchronized void interaction(ClientHandler client, String chaine)
+    {
+    	System.out.println("client_"+Integer.toString(client.getNumberClient()) + " : " + chaine );
+    	client.sendAnswer("[send](size " + chaine.length()+")");
+    }
 
     public static void main(String[] argu) {
         Serveur s = new Serveur(2501);

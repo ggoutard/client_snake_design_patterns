@@ -38,18 +38,39 @@ public class Client {
         try {
             this.sortie.println(chaine);
             String reponse = this.entree.readLine();
-            System.out.println("Message envoyé : " + chaine + "\nRéponse reçue : " + reponse);
+            System.out.println("anwser: " + reponse);
         } catch (IOException e) {
             System.out.println("Aucun serveur n’est rattaché au port");
+        }
+    }
+    
+    
+    public void runSaisie() {
+        String chaine = "";
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Saisissez une chaîne (ou 'stop' pour quitter) : ");
+
+        try {
+            while (!chaine.equals("stop")) {
+                System.out.print("shell:> ");
+                chaine = reader.readLine();
+                this.sendMessage(chaine);
+            }
+        } catch (IOException e) {
+            System.out.println("Erreur de lecture : " + e);
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                System.out.println("Erreur lors de la fermeture du lecteur : " + e);
+            }
         }
     }
 
     public static void main(String[] argu) {
         Client c = new Client("127.0.0.1");
         c.connect(2501);
-        c.sendMessage("hello world");
-        c.sendMessage("Salut monde");
-        c.sendMessage("stop");
+        c.runSaisie();
         c.disconnect();
     }
 }

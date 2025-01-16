@@ -6,7 +6,7 @@ import java.io.*;
 public class ClientHandler extends Thread implements Comparable<ClientHandler> {
     private static int COUNTER = 0;
 
-    private int id;
+    private int numberClient;
     private Socket socket;
     private Serveur serveur;
     private BufferedReader entree;
@@ -14,7 +14,7 @@ public class ClientHandler extends Thread implements Comparable<ClientHandler> {
 
     public ClientHandler(Serveur serveur, Socket socket) {
     	
-        this.id = ClientHandler.COUNTER++;
+        this.numberClient = ClientHandler.COUNTER++;
         this.socket = socket;
         this.serveur = serveur;
         
@@ -34,8 +34,7 @@ public class ClientHandler extends Thread implements Comparable<ClientHandler> {
         String chaine;
         try {
             while ((chaine = entree.readLine()) != null) {
-                this.print("On a reçu : |" + chaine + "|");
-                this.sendAnswer("Longueur : " + chaine.length());
+            	this.serveur.interaction(this,chaine);		
                 if (chaine.equals("stop")) {
                     break;
                 }
@@ -63,7 +62,7 @@ public class ClientHandler extends Thread implements Comparable<ClientHandler> {
 
     @Override
     public int compareTo(ClientHandler other) {
-        return Integer.toString(this.id).compareTo(Integer.toString(other.id));
+        return Integer.toString(this.numberClient).compareTo(Integer.toString(other.numberClient));
     }
 
     public void sendAnswer(String chaine) {
@@ -71,9 +70,11 @@ public class ClientHandler extends Thread implements Comparable<ClientHandler> {
         this.sortie.println(chaine);
        
     }
-
-    public void print(String chaine) {
-        if (socket.isClosed()) throw new Error("Socket fermé, impossible d'écrire le message.");
-        System.out.println(chaine);
+    
+    public int getNumberClient()
+    {
+    	return numberClient;
     }
+
+    
 }
