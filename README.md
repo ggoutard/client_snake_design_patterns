@@ -11,3 +11,10 @@ ex2 : multiutilisateurs (simultanés)
 ex3 : chat
 
 projet ( jackson) -> objet annotés  <-> json
+
+I/O compatibles
+- PrintWriter
+- BufferedReader
+
+Println
+     --
