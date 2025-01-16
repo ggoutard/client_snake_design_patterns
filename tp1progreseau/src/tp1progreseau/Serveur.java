@@ -19,10 +19,8 @@ public class Serveur {
             while (true) {
                 try {
                 	Socket so = ecoute.accept();
-                
                 	BufferedReader entree = new BufferedReader(new InputStreamReader(so.getInputStream()));
                     PrintWriter sortie = new PrintWriter(so.getOutputStream());
-
                     String ch = entree.readLine();
                     System.out.println("On a reçu : |" + ch + "|");
                     sortie.write(ch.length());
