@@ -4,6 +4,9 @@ Exemple : lettres dans un mot
 -> cours
 
 Ex1 : plusieurs mots (tant que ! stop)
+
+---
+
 Ex2 : multi-utilisateurs (simultanés)
 
 ---
