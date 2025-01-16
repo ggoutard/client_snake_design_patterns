@@ -10,6 +10,9 @@ Ex2 : multi-utilisateurs (simultanés)
 
 Ex3 : chat
 
+
+---
+
 Projet (Jackson) -> objets annotés <-> JSON
 
 I/O compatibles:
@@ -17,3 +20,6 @@ I/O compatibles:
 - BufferedReader
 
 Println
+
+
+---
