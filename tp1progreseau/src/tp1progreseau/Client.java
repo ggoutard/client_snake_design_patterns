@@ -5,31 +5,26 @@ import java.io.*;
 
 public class Client {
 	
-	private String name;
+	private String adresse;
 	private int port;
-	private String currentmessage;
+	private String currentMessage;
 	private String postMessage;
 	private int lengthCurrentMessage;
 	private Socket socket;
 	
-	public Client(String name) {
-		this.name = name;
+	public Client(String adresse) {
+		this.adresse = adresse;
 	
 	}
 	
 	public void connect(int port) {
 		this.port = port;
-		BufferedReader entree;
-		PrintWriter sortie;
-		
+	
 		try
 		{
-			this.socket = new Socket(name, this.port);
-//			sortie = new PrintWriter(so.getOutputStream(), true);
-//			entree = new BufferedReader(new InputStreamReader(so.getInputStream()));
-//			sortie.println(this.currentmessage); 
-//			this.lengthCurrentMessage = entree.read();
-//			System.out.println("D’après le serveur la longueur de "+this.currentmessage+" est "+this.lengthCurrentMessage);
+			this.socket = new Socket(adresse, this.port);
+			
+			System.out.println("Connecté");
 		} 
 		catch(UnknownHostException e) {System.out.println(e);}
 		catch (IOException e) {System.out.println("Aucun serveur n’est rattaché au port ");}
@@ -44,4 +39,28 @@ public class Client {
 		catch (IOException e) {System.out.println("Le socket n'est pas connecté");}
 	}
 	
+	public void sendMessage(String chaine) {
+	    BufferedReader entree;
+	    PrintWriter sortie;
+
+	    try {
+	        sortie = new PrintWriter(this.socket.getOutputStream(), true);
+	        entree = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+	        sortie.println(chaine); 
+	        this.lengthCurrentMessage = entree.read();
+	    } catch (IOException e) {
+	        System.out.println("Aucun serveur n’est rattaché au port");
+	    }
+	}
+	
+	
+    public static void main(String[] argu) {
+		
+    	Client c = new Client("127.0.0.1");
+		c.connect(2501);
+		c.sendMessage("hello world");
+		c.disconnect();
+		
+	}
+
 } 
