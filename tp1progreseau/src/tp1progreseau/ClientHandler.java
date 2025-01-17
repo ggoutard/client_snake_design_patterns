@@ -4,7 +4,8 @@ import java.net.*;
 import java.io.*;
 
 public class ClientHandler extends Thread implements Comparable<ClientHandler> {
-    private static int COUNTER = 0;
+    
+	private static int COUNTER = 0;
 
     private int numberClient;
     private Socket socket;
@@ -49,6 +50,7 @@ public class ClientHandler extends Thread implements Comparable<ClientHandler> {
                 System.out.println("Erreur lors de la fermeture du socket : " + exept);
             }
         } 
+        this.interrupt();
     }
 
 
