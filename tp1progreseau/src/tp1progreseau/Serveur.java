@@ -5,7 +5,8 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Serveur {
-    private int port;
+    
+	private int port;
     private ServerSocket ecoute;
     private ArrayList<ClientHandler> clients;
 
@@ -44,8 +45,14 @@ public class Serveur {
     	
     public synchronized void interaction(ClientHandler client, String chaine)
     {
-    	System.out.println("client_"+Integer.toString(client.getNumberClient()) + " : " + chaine );
-    	client.sendAnswer("[send](size " + chaine.length()+")");
+    	for(ClientHandler otherClient : this.clients)
+    	{
+    		if(client != otherClient) otherClient.sendAnswer("client_"+Integer.toString(client.getNumberClient()) + " : " + chaine);
+    	}
+	    	
+		System.out.println("client_"+Integer.toString(client.getNumberClient()) + " : " + chaine );
+
+	    	
     }
 
     public static void main(String[] argu) {
