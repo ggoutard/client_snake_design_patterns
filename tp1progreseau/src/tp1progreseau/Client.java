@@ -4,73 +4,83 @@ import java.net.*;
 import java.io.*;
 
 public class Client {
-    private String adresse;
-    private int port;
-    private Socket socket;
-    private BufferedReader entree;
-    private PrintWriter sortie;
 
-    public Client(String adresse) {
-        this.adresse = adresse;
-    }
+    private static class ThreadInput implements Runnable {
+        private PrintWriter sortie;
 
-    public void connect(int port) {
-        this.port = port;
-        try {
-            this.socket = new Socket(this.adresse, this.port);
-            this.sortie = new PrintWriter(this.socket.getOutputStream(), true);
-            this.entree = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-            System.out.println("Connecté");
-        } catch (IOException e) {
-            System.out.println("Aucun serveur n’est rattaché au port");
+        public ThreadInput(PrintWriter sortie) {
+            this.sortie = sortie;
         }
-    }
 
-    public void disconnect() {
-        try {
-            this.socket.close();
-        } catch (IOException e) {
-            System.out.println("Le socket n'est pas connecté");
-        }
-    }
-
-    public void sendMessage(String chaine) {
-        try {
-            this.sortie.println(chaine);
-            String reponse = this.entree.readLine();
-            System.out.println("anwser: " + reponse);
-        } catch (IOException e) {
-            System.out.println("Aucun serveur n’est rattaché au port");
-        }
-    }
-    
-    
-    public void runSaisie() {
-        String chaine = "";
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Saisissez une chaîne (ou 'stop' pour quitter) : ");
-
-        try {
-            while (!chaine.equals("stop")) {
-                System.out.print("shell:> ");
-                chaine = reader.readLine();
-                this.sendMessage(chaine);
-            }
-        } catch (IOException e) {
-            System.out.println("Erreur de lecture : " + e);
-        } finally {
+        @Override
+        public void run() {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            String chaine = "";
             try {
-                reader.close();
+                while (!chaine.equals("stop")) {
+                    chaine = reader.readLine(); // lire la saisie de l'utilisateur
+                    sortie.println(chaine); // envoyer le message au serveur
+                }
             } catch (IOException e) {
-                System.out.println("Erreur lors de la fermeture du lecteur : " + e);
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static class ThreadOutput implements Runnable {
+        private BufferedReader entree;
+
+        public ThreadOutput(BufferedReader entree) {
+            this.entree = entree;
+        }
+
+        @Override
+        public void run() {
+            try {
+                String message;
+                while (true) {
+                    message = entree.readLine(); // lire un message du serveur
+                    if (message == null) break; // si on atteint la fin du stream, on sort
+                    System.out.println(message); // afficher le message
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
     public static void main(String[] argu) {
-        Client c = new Client("127.0.0.1");
-        c.connect(2501);
-        c.runSaisie();
-        c.disconnect();
+        Socket socket;
+        BufferedReader entree;
+        PrintWriter sortie;
+        String ip = "127.0.0.1"; // l'adresse du serveur
+        int p = 2545; // le port de connexion
+
+        try {
+            // Connexion au serveur
+            socket = new Socket(ip, p);
+            sortie = new PrintWriter(socket.getOutputStream(), true);
+            entree = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            // Lancer le thread pour la saisie de l'utilisateur
+            Thread inputThread = new Thread(new ThreadInput(sortie));
+            inputThread.start();
+
+            // Lancer le thread pour écouter les messages du serveur (qui sont les messages des autres clients)
+            Thread outputThread = new Thread(new ThreadOutput(entree));
+            outputThread.start();
+
+            // Attendre la fin des threads
+            inputThread.join();
+            outputThread.join();
+
+            socket.close(); // Fermer la connexion
+        } catch (UnknownHostException e) {
+            System.out.println(e);
+        } catch (IOException e) {
+            System.out.println("Aucun serveur n’est rattaché au port");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
