@@ -15,11 +15,11 @@ public class Client {
         @Override
         public void run() {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            String ch = "";
+            String chaine = "";
             try {
-                while (!ch.equals("stop")) {
-                    ch = reader.readLine(); // lire la saisie de l'utilisateur
-                    sortie.println(ch); // envoyer le message au serveur
+                while (!chaine.equals("stop")) {
+                    chaine = reader.readLine(); // lire la saisie de l'utilisateur
+                    sortie.println(chaine); // envoyer le message au serveur
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -41,7 +41,7 @@ public class Client {
                 while (true) {
                     message = entree.readLine(); // lire un message du serveur
                     if (message == null) break; // si on atteint la fin du stream, on sort
-                    System.out.println("Message d'un autre client : " + message); // afficher le message
+                    System.out.println(message); // afficher le message
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -50,17 +50,17 @@ public class Client {
     }
 
     public static void main(String[] argu) {
-        Socket so;
+        Socket socket;
         BufferedReader entree;
         PrintWriter sortie;
-        String s = "127.0.0.1"; // l'adresse du serveur
+        String ip = "127.0.0.1"; // l'adresse du serveur
         int p = 2545; // le port de connexion
 
         try {
             // Connexion au serveur
-            so = new Socket(s, p);
-            sortie = new PrintWriter(so.getOutputStream(), true);
-            entree = new BufferedReader(new InputStreamReader(so.getInputStream()));
+            socket = new Socket(ip, p);
+            sortie = new PrintWriter(socket.getOutputStream(), true);
+            entree = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             // Lancer le thread pour la saisie de l'utilisateur
             Thread inputThread = new Thread(new ThreadInput(sortie));
@@ -74,7 +74,7 @@ public class Client {
             inputThread.join();
             outputThread.join();
 
-            so.close(); // Fermer la connexion
+            socket.close(); // Fermer la connexion
         } catch (UnknownHostException e) {
             System.out.println(e);
         } catch (IOException e) {
