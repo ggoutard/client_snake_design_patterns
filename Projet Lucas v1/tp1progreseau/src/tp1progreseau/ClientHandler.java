@@ -1,35 +1,46 @@
 package tp1progreseau;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 
-class ClientHandler extends Thread {
+public class ClientHandler implements Runnable {
+	
+	
+	private static int COUNTER = 0;
+	
+	
+	private int identifiant;
     private Socket socket;
-    private static int nbClients = 0;
-    private int numeroClient;
-
-    public ClientHandler(Socket socket) {
+    private BufferedReader entree;
+    private PrintWriter sortie;
+    
+    public ClientHandler(Socket socket, BufferedReader entree, PrintWriter sortie) {
+    	this.identifiant = ClientHandler.COUNTER++;
         this.socket = socket;
-        this.numeroClient = nbClients++; 
+        this.entree = entree;
+        this.sortie = sortie;
     }
-
+    
     @Override
     public void run() {
         try {
-        	BufferedReader entree = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter sortie = new PrintWriter(socket.getOutputStream(), true);
-            String ch; // La chaîne reçue
-            while ((ch = entree.readLine()) != null && !ch.equals("stop")) {
-                System.out.println("Message reçu du client " + numeroClient + " : |" + ch + "|");
-                sortie.println(Integer.toString(ch.length())); // Envoie la longueur de la chaîne
-                System.out.println("Longueur envoyée : " + ch.length());
+            String message;
+            while ((message = entree.readLine()) != null) {
+                if (message.equals("stop")) 
+                {
+                    break;
+                }
+                Serveur.sendMessage(identifiant,message, sortie);
             }
-            socket.close(); // Fermeture du socket une fois le traitement terminé
-        } catch (IOException e) {
-            System.out.println("Erreur lors de la communication avec le client : " + e.getMessage());
+        } 
+        catch (IOException e) {e.printStackTrace();} 
+        finally {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Serveur.removeClient(sortie);
         }
     }
 }
