@@ -4,6 +4,7 @@ import java.net.*;
 import tp1progreseau.accueil.Accueil;
 import tp1progreseau.controller.ControllerSnakeGameNetwork;
 import tp1progreseau.utils.Commande;
+import tp1progreseau.utils.FeaturesItem;
 import tp1progreseau.utils.FeaturesSnake;
 import tp1progreseau.utils.PanelBuilder;
 
@@ -56,12 +57,14 @@ public class ClientSnake extends Client {
         public void updatePanel(String jsonContent) {
             try {
                 PanelBuilder panelBuilder = PanelBuilder.fromJson(jsonContent);
-                if (panelBuilder == null) {
-                    System.out.println("PanelBuilder is null, unable to process further.");
-                    return;
+            	System.out.println(jsonContent);
+                if (panelBuilder != null) {
+                	System.out.println(jsonContent);
+                    ArrayList<FeaturesSnake> featuresSnakes = panelBuilder.getFeaturesSnakes();
+                    ArrayList<FeaturesItem> featuresItems = panelBuilder.getFeaturesItems();
+                    this.controller.update(featuresSnakes, featuresItems);
                 }
-                // Continue with your logic if panelBuilder is valid
-                ArrayList<FeaturesSnake> featuresSnakes = panelBuilder.getFeaturesSnakes();
+               
             } catch (IllegalArgumentException | IOException e) {
                 System.out.println("Error deserializing JSON: " + e.getMessage());
             }
