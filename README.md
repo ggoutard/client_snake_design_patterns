@@ -26,3 +26,4 @@ Println
 
 
 ---
+find . -type f -name "*.class" -delete
