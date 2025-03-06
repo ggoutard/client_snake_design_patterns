@@ -1,97 +1,66 @@
 package tp1progreseau.accueil;
 
 import javax.swing.*;
+import javax.swing.border.AbstractBorder;
 import java.awt.*;
 import tp1progreseau.controller.ControllerSnakeGameNetwork;
-import tp1progreseau.gameElement.fabrique.TypeSnake;
-
-import tp1progreseau.gameElement.fabrique.TypeSnake;
 
 public class Accueil extends JFrame {
 
-    private JButton playersButton;
-    private JButton playerTypeButton;
     private JButton mapSizeButton;
     private JButton wallsButton;
     private JButton startButton;
-    private boolean isTwoPlayers = false;
     private String path;
-    private TypeSnake joueur1;
-    private TypeSnake joueur2;
     private ControllerSnakeGameNetwork controller;
 
     public Accueil(ControllerSnakeGameNetwork controller) {
         this.controller = controller;
 
-        setTitle("Snake War");
+        setTitle("Snake Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600); 
-        setResizable(false);
-        setLayout(new BorderLayout());
+        setSize(800, 600);
+        setResizable(true);  
         getContentPane().setBackground(Color.BLACK);
-        setResizable(true); 
-        JPanel titlePanel = new JPanel();
-        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout());
+
+
+        JPanel titlePanel = new JPanel(new GridBagLayout());
         titlePanel.setBackground(Color.BLACK);
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(140, 0, 20, 0)); 
 
-        JLabel titleLabel = new JLabel("Snake War", JLabel.CENTER);
-        titleLabel.setFont(new Font("Monospaced", Font.BOLD, 48)); // Style de police pixelisé
+        JLabel titleLabel = new JLabel("Snake Game");
+        titleLabel.setFont(new Font("Monospaced", Font.BOLD, 94)); 
         titleLabel.setForeground(Color.WHITE);
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        titlePanel.add(Box.createVerticalStrut(50));
         titlePanel.add(titleLabel);
-        titlePanel.add(Box.createVerticalStrut(20));
-
         add(titlePanel, BorderLayout.NORTH);
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
         buttonPanel.setBackground(Color.BLACK);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 0, 10, 0); 
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
 
-        Font buttonFont = new Font("Monospaced", Font.BOLD, 24); // Style de police pixelisé
+        Font buttonFont = new Font("Monospaced", Font.BOLD, 24);
         Color buttonColor = new Color(255, 255, 255);
 
-        playersButton = createButton("Un joueur", buttonFont, buttonColor);
-        playersButton.addActionListener(e -> {
-            toggleText(playersButton, "Un joueur", "Deux joueurs");
-            togglePlayerTypeOptions();
-        });
+        mapSizeButton = createButton("Petite carte", buttonFont, buttonColor);
+        mapSizeButton.addActionListener(e -> cycleText(mapSizeButton, new String[]{"Petite carte", "Grande carte"}));
+        gbc.gridy = 0;
+        buttonPanel.add(mapSizeButton, gbc);
 
-        playerTypeButton = createButton("Joueur", buttonFont, buttonColor);
-        playerTypeButton.addActionListener(e -> {
-            if (isTwoPlayers) {
-                cycleText(playerTypeButton, new String[]{"Joueur vs Joueur", "Joueur vs Random", "Joueur vs IA", "IA vs IA"});
-            } else {
-                cycleText(playerTypeButton, new String[]{"Joueur", "Random", "AI"});
-            }
-        });
+        wallsButton = createButton("Carte avec des murs", buttonFont, buttonColor);
+        wallsButton.addActionListener(e -> toggleText(wallsButton, "Carte avec des murs", "Carte sans des murs"));
+        gbc.gridy = 1;
+        buttonPanel.add(wallsButton, gbc);
 
-        mapSizeButton = createButton("Petite", buttonFont, buttonColor);
-        mapSizeButton.addActionListener(e -> cycleText(mapSizeButton, new String[]{"Petite", "Grande"}));
+        startButton = createButton("Rechercher une partie", buttonFont, buttonColor);
+        startButton.addActionListener(e -> Launch());
+        gbc.gridy = 2;
+        buttonPanel.add(startButton, gbc);
 
-        wallsButton = createButton("Avec murs", buttonFont, buttonColor);
-        wallsButton.addActionListener(e -> toggleText(wallsButton, "Avec murs", "Sans murs"));
-
-        startButton = createButton("Lancer la partie", buttonFont, buttonColor);
-        startButton.addActionListener(e -> this.Launch());
-
-        buttonPanel.add(Box.createVerticalGlue());
-        buttonPanel.add(playersButton);
-        buttonPanel.add(Box.createVerticalStrut(20));
-        buttonPanel.add(playerTypeButton);
-        buttonPanel.add(Box.createVerticalStrut(20));
-        buttonPanel.add(mapSizeButton);
-        buttonPanel.add(Box.createVerticalStrut(20));
-        buttonPanel.add(wallsButton);
-        buttonPanel.add(Box.createVerticalStrut(20));
-        buttonPanel.add(startButton);
-        buttonPanel.add(Box.createVerticalGlue());
-
+        // Panel extérieur pour centrer le panneau des boutons
         JPanel outerPanel = new JPanel(new GridBagLayout());
-        outerPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         outerPanel.setBackground(Color.BLACK);
         outerPanel.add(buttonPanel, new GridBagConstraints());
 
@@ -104,11 +73,10 @@ public class Accueil extends JFrame {
         button.setFont(font);
         button.setBackground(backgroundColor);
         button.setForeground(Color.BLACK);
-        button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        button.setBorder(new RoundedBorder(10));
+        button.setFocusPainted(false);
         button.setOpaque(true);
-        button.setFocusPainted(false); // Remove focus border
-        button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2, true)); // Bordure arrondie
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setPreferredSize(new Dimension(400, 60));
         return button;
     }
 
@@ -126,91 +94,56 @@ public class Accueil extends JFrame {
         }
     }
 
-    private void togglePlayerTypeOptions() {
-        isTwoPlayers = !isTwoPlayers;
-        if (isTwoPlayers) {
-            playerTypeButton.setText("Joueur vs Joueur");
-        }
-    }
-
     public void Launch() {
-        String players = playersButton.getText();
         String mapSize = mapSizeButton.getText();
         String walls = wallsButton.getText();
-        String modPlayers = playerTypeButton.getText();
-    
-        if (players.equals("Un joueur")) {
-            switch (mapSize) {
-                case "Petite":
-                    path = walls.equals("Avec murs") ? "src/tp1progreseau/layouts/small.lay" : "src/tp1progreseau/layouts/smallNoWall.lay";
-                    break;
-                case "Grande":
-                    path = walls.equals("Avec murs") ? "src/tp1progreseau/layouts/alone.lay" : "src/tp1progreseau/layouts/aloneNoWall.lay";
-                    break;
-            }
-        } else if (players.equals("Deux joueurs")) {
-            switch (mapSize) {
-                case "Petite":
-                    path = walls.equals("Avec murs") ? "src/tp1progreseau/layouts/smallArena.lay" : "src/tp1progreseau/layouts/smallArenaNoWall.lay";
-                    break;
-                case "Grande":
-                    path = walls.equals("Avec murs") ? "src/tp1progreseau/layouts/arena.lay" : "src/tp1progreseau/layouts/arenaNoWall.lay";
-                    break;
-            }
+
+        switch (mapSize) {
+            case "Petite carte":
+                path = walls.equals("Carte avec des murs")
+                    ? "src/tp1progreseau/layouts/smallArena.lay"
+                    : "src/tp1progreseau/layouts/smallArenaNoWall.lay";
+                break;
+            case "Grande carte":
+                path = walls.equals("Carte avec des murs")
+                    ? "src/tp1progreseau/layouts/arena.lay"
+                    : "src/tp1progreseau/layouts/arenaNoWall.lay";
+                break;
         }
-
-        if (players.equals("Un joueur")) {
-            joueur2 = null;
-            switch (modPlayers) {
-                case "Joueur":
-                    joueur1 = TypeSnake.HUMAN;
-                    break;
-                case "Random":
-                    joueur1 = TypeSnake.RANDOM;
-                    break;
-                case "AI":
-                    joueur1 = TypeSnake.IA;
-                    break;
-            }
-        } else {
-            switch (modPlayers) {
-                case "Joueur vs Joueur":
-                    joueur1 = TypeSnake.HUMAN;
-                    joueur2 = TypeSnake.HUMAN;
-                    break;
-                case "Joueur vs Random":
-                    joueur1 = TypeSnake.HUMAN;
-                    joueur2 = TypeSnake.RANDOM;
-                    break;
-                case "Joueur vs IA":
-                    joueur1 = TypeSnake.HUMAN;
-                    joueur2 = TypeSnake.IA;
-                    break;
-                case "IA vs IA":
-                    joueur1 = TypeSnake.IA;
-                    joueur2 = TypeSnake.IA;
-                    break;
-            }
-        }
-
-        this.dispose();
-    }
-
-    public TypeSnake getJoueur1() {
-        return joueur1;
-    }
-
-    public TypeSnake getJoueur2() {
-        return joueur2;
-    }
-
-    public String getPath() {
-        return path;
+        dispose();
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        controller.build(path, joueur1, joueur2);
+        controller.build(path, null, null);
+    }
+
+    // Classe interne pour une bordure arrondie
+    private static class RoundedBorder extends AbstractBorder {
+        private final int radius;
+
+        public RoundedBorder(int radius) {
+            this.radius = radius;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(Color.WHITE);
+            g2.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return new Insets(radius + 1, radius + 1, radius + 1, radius + 1);
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c, Insets insets) {
+            insets.left = insets.top = insets.right = insets.bottom = radius + 1;
+            return insets;
+        }
     }
 }
