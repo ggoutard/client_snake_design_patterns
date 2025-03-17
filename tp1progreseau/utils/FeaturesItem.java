@@ -1,0 +1,60 @@
+package tp1progreseau.utils;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class FeaturesItem extends Features {
+
+	@JsonProperty("x")
+	private int x;
+	@JsonProperty("y")
+	private int y;
+	@JsonProperty("itemType")
+	private ItemType itemType;
+
+
+	public FeaturesItem() {}
+
+	public FeaturesItem(int x, int y, ItemType itemType) {
+		
+		this.x = x;
+		this.y = y;
+		this.itemType = itemType;
+	
+	}
+	
+	
+	
+	
+	public int getX() {
+		return x;
+	}
+
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+
+	public int getY() {
+		return y;
+	}
+
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+
+	public ItemType getItemType() {
+		return itemType;
+	}
+
+
+	public void setItemType(ItemType itemType) {
+		this.itemType = itemType;
+	}
+
+
+	
+	
+}
