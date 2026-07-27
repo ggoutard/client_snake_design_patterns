@@ -2,9 +2,13 @@
 
 Ce depot contient l'application Client d'une architecture Client/Serveur concue pour un jeu Snake multijoueur. Developpe strictement autour des principes de la programmation orientee objet, ce projet demontre une comprehension approfondie de l'ingenierie logicielle, de la programmation reseau robuste et des patrons de conception (Design Patterns).
 
-Vous pouvez tester l'emulateur interactif directement dans le navigateur (aucune installation Java requise) :
+Vous pouvez consulter la documentation en ligne du projet, découvrir le backend serveur et tester l'emulateur interactif directement dans le navigateur (aucune installation Java requise) :
 
-[TESTER LA DEMONSTRATION WEB ICI](http://localhost:5500/client_snake_design_patterns/)
+[CONSULTER L'ARCHITECTURE CLIENT EN LIGNE](https://ggoutard.github.io/client_snake_design_patterns/)
+
+[CONSULTER L'ARCHITECTURE SERVEUR JAVA EE](https://ayluc.github.io/web_avance_snake/)
+
+[TESTER LE SIMULATEUR DE JEU INTERACTIF EN LIGNE](https://ggoutard.github.io/client_snake_design_patterns/simulator.html)
 
 ---
 
