@@ -366,7 +366,7 @@ class Item {
 
 async function fetchLayout(layoutName) {
     try {
-        const response = await fetch('../layouts/' + layoutName + '.lay');
+        const response = await fetch('layouts/' + layoutName + '.lay');
         if (!response.ok) throw new Error("Fichier introuvable");
         const text = await response.text();
         parseLayout(text);
