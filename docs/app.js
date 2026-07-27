@@ -28,14 +28,14 @@ const imgs = {
     snake_green: [new Image(), new Image(), new Image(), new Image(), new Image()],
     snake_red: [new Image(), new Image(), new Image(), new Image(), new Image()]
 };
-imgs.apple.src = '../images/apple.png';
-imgs.sick.src = '../images/sickBall.png';
-imgs.invincible.src = '../images/invicibleBall.png';
-imgs.mystery.src = '../images/mysteryBox.png';
-imgs.wall.src = '../images/wall.png';
+imgs.apple.src = 'images/apple.png';
+imgs.sick.src = 'images/sickBall.png';
+imgs.invincible.src = 'images/invicibleBall.png';
+imgs.mystery.src = 'images/mysteryBox.png';
+imgs.wall.src = 'images/wall.png';
 for (let i = 0; i < 5; i++) {
-    imgs.snake_green[i].src = `../images/snake_green_${i}.png`;
-    imgs.snake_red[i].src = `../images/snake_red_${i}.png`;
+    imgs.snake_green[i].src = `images/snake_green_${i}.png`;
+    imgs.snake_red[i].src = `images/snake_red_${i}.png`;
 }
 
 const Direction = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 };
