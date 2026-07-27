@@ -46,7 +46,7 @@ class Snake {
     constructor(id, imgsArray, startX, startY) {
         this.id = id;
         this.imgs = imgsArray;
-        this.body = [{x: startX, y: startY}];
+        this.body = [{ x: startX, y: startY }];
         this.direction = Direction.RIGHT;
         this.nextDirection = Direction.RIGHT;
         this.isBot = false; // Defini dans initGame
@@ -86,9 +86,9 @@ class Snake {
             let tries = 0;
             while (walls.some(w => w.x === head.x && w.y === head.y) && tries < gridSizeX + gridSizeY) {
                 switch (this.direction) {
-                    case Direction.UP:    head.y = (head.y - 1 + gridSizeY) % gridSizeY; break;
-                    case Direction.DOWN:  head.y = (head.y + 1) % gridSizeY; break;
-                    case Direction.LEFT:  head.x = (head.x - 1 + gridSizeX) % gridSizeX; break;
+                    case Direction.UP: head.y = (head.y - 1 + gridSizeY) % gridSizeY; break;
+                    case Direction.DOWN: head.y = (head.y + 1) % gridSizeY; break;
+                    case Direction.LEFT: head.x = (head.x - 1 + gridSizeX) % gridSizeX; break;
                     case Direction.RIGHT: head.x = (head.x + 1) % gridSizeX; break;
                 }
                 tries++;
@@ -145,10 +145,10 @@ class Snake {
     // fromDir: direction d'ou l'on vient (pour interdire le demi-tour)
     getNeighbors(pos, body, fromDir, invincible) {
         const DIRS = [
-            { dx: 0, dy: -1, dir: Direction.UP,    opp: Direction.DOWN  },
-            { dx: 0, dy:  1, dir: Direction.DOWN,   opp: Direction.UP    },
-            { dx:-1, dy:  0, dir: Direction.LEFT,   opp: Direction.RIGHT },
-            { dx: 1, dy:  0, dir: Direction.RIGHT,  opp: Direction.LEFT  },
+            { dx: 0, dy: -1, dir: Direction.UP, opp: Direction.DOWN },
+            { dx: 0, dy: 1, dir: Direction.DOWN, opp: Direction.UP },
+            { dx: -1, dy: 0, dir: Direction.LEFT, opp: Direction.RIGHT },
+            { dx: 1, dy: 0, dir: Direction.RIGHT, opp: Direction.LEFT },
         ];
         const results = [];
         for (const d of DIRS) {
@@ -173,7 +173,7 @@ class Snake {
         visited.add(`${startPos.x},${startPos.y}`);
         const inv = this.isInvincible;
 
-        const queue = [{ pos: startPos, body: startBody.map(s => ({...s})), grow: startGrow, path: [] }];
+        const queue = [{ pos: startPos, body: startBody.map(s => ({ ...s })), grow: startGrow, path: [] }];
 
         while (queue.length > 0) {
             const curr = queue.shift();
@@ -211,7 +211,7 @@ class Snake {
         const queue = [pos];
         while (queue.length > 0) {
             const cur = queue.shift();
-            for (const d of [{dx:0,dy:-1},{dx:0,dy:1},{dx:-1,dy:0},{dx:1,dy:0}]) {
+            for (const d of [{ dx: 0, dy: -1 }, { dx: 0, dy: 1 }, { dx: -1, dy: 0 }, { dx: 1, dy: 0 }]) {
                 const n = this.wrap(cur.x + d.dx, cur.y + d.dy);
                 const key = `${n.x},${n.y}`;
                 if (visited.has(key)) continue;
@@ -230,8 +230,10 @@ class Snake {
         const inv = this.isInvincible;
 
         // Direction opposee a interdire au 1er pas
-        const OPP = { [Direction.UP]: Direction.DOWN, [Direction.DOWN]: Direction.UP,
-                      [Direction.LEFT]: Direction.RIGHT, [Direction.RIGHT]: Direction.LEFT };
+        const OPP = {
+            [Direction.UP]: Direction.DOWN, [Direction.DOWN]: Direction.UP,
+            [Direction.LEFT]: Direction.RIGHT, [Direction.RIGHT]: Direction.LEFT
+        };
         const oppDir = OPP[this.direction];
 
         // Chercher la pomme la plus proche
@@ -248,15 +250,17 @@ class Snake {
 
         if (pathToApple && pathToApple.length > 0) {
             // Simuler l'etat du corps apres avoir mange la pomme
-            let futureBody = this.body.map(s => ({...s}));
+            let futureBody = this.body.map(s => ({ ...s }));
             let futureGrow = this.growPending; // Croissance reelle initiale (sans +1 prématuré !)
             for (let i = 0; i < pathToApple.length; i++) {
                 const dir = pathToApple[i];
-                const delta = { [Direction.UP]:{dx:0,dy:-1}, [Direction.DOWN]:{dx:0,dy:1},
-                                [Direction.LEFT]:{dx:-1,dy:0}, [Direction.RIGHT]:{dx:1,dy:0} }[dir];
+                const delta = {
+                    [Direction.UP]: { dx: 0, dy: -1 }, [Direction.DOWN]: { dx: 0, dy: 1 },
+                    [Direction.LEFT]: { dx: -1, dy: 0 }, [Direction.RIGHT]: { dx: 1, dy: 0 }
+                }[dir];
                 const fh = this.wrap(futureBody[0].x + delta.dx, futureBody[0].y + delta.dy);
                 futureBody.unshift(fh);
-                
+
                 // C'est UNIQUEMENT a l'arrivee sur la pomme qu'il grandit de +1
                 if (i === pathToApple.length - 1) futureGrow += 1;
 
@@ -290,10 +294,10 @@ class Snake {
             // Vérifier si après cette action le serpent conserve une sortie de secours vers sa queue
             const canEscape = (nextBody.length <= 3) || (this.bfs(n, nextTail, nextBody, 0, OPP[n.dir]) !== null);
             const space = this.floodFill(n, nextBody, inv);
-            
+
             // Eloignement de la pomme pour élargir le virage et éviter d'osciller stupidement autour d'elle
             const distToTarget = Math.abs(n.x - target.x) + Math.abs(n.y - target.y);
-            
+
             return { dir: n.dir, canEscape, space, distToTarget };
         });
 
@@ -362,20 +366,20 @@ class Item {
 
 async function fetchLayout(layoutName) {
     try {
-        const response = await fetch('layouts/' + layoutName + '.lay');
+        const response = await fetch('../layouts/' + layoutName + '.lay');
         if (!response.ok) throw new Error("Fichier introuvable");
         const text = await response.text();
         parseLayout(text);
     } catch (e) {
         console.error("Erreur de chargement du layout, fallback...", e);
         gridSizeX = 20; gridSizeY = 20;
-        walls = []; spawns = [{x: 5, y: 5}, {x: 15, y: 15}];
+        walls = []; spawns = [{ x: 5, y: 5 }, { x: 15, y: 15 }];
         tileSizeX = canvas.width / gridSizeX; tileSizeY = canvas.height / gridSizeY;
     }
 }
 
 function parseLayout(text) {
-    const lines = text.split('\n').map(l => l.replace('\r','')).filter(l => l.length > 0);
+    const lines = text.split('\n').map(l => l.replace('\r', '')).filter(l => l.length > 0);
     gridSizeY = lines.length;
     gridSizeX = Math.max(...lines.map(l => l.length));
     tileSizeX = canvas.width / gridSizeX;
@@ -383,18 +387,18 @@ function parseLayout(text) {
 
     walls = [];
     spawns = [];
-    
+
     for (let y = 0; y < gridSizeY; y++) {
         for (let x = 0; x < lines[y].length; x++) {
             const char = lines[y][x];
-            if (char === '%') walls.push({x, y});
-            if (char === 'S' || char === 'A') spawns.push({x, y});
+            if (char === '%') walls.push({ x, y });
+            if (char === 'S' || char === 'A') spawns.push({ x, y });
         }
     }
-    
+
     if (spawns.length < 2) {
-        spawns.push({x: Math.floor(gridSizeX/4), y: Math.floor(gridSizeY/2)});
-        spawns.push({x: Math.floor(gridSizeX*0.75), y: Math.floor(gridSizeY/2)});
+        spawns.push({ x: Math.floor(gridSizeX / 4), y: Math.floor(gridSizeY / 2) });
+        spawns.push({ x: Math.floor(gridSizeX * 0.75), y: Math.floor(gridSizeY / 2) });
     }
 }
 
@@ -403,9 +407,9 @@ function spawnApple() {
     while (!valid) {
         x = Math.floor(Math.random() * gridSizeX);
         y = Math.floor(Math.random() * gridSizeY);
-        valid = !walls.some(w => w.x === x && w.y === y) && 
-                !snakes.some(s => s.body.some(b => b.x === x && b.y === y)) &&
-                !items.some(i => i.x === x && i.y === y);
+        valid = !walls.some(w => w.x === x && w.y === y) &&
+            !snakes.some(s => s.body.some(b => b.x === x && b.y === y)) &&
+            !items.some(i => i.x === x && i.y === y);
     }
     items.push(new Item(x, y, ItemType.APPLE));
 
@@ -421,9 +425,9 @@ function spawnSpecialItem() {
     while (!valid && attempts < 100) {
         x = Math.floor(Math.random() * gridSizeX);
         y = Math.floor(Math.random() * gridSizeY);
-        valid = !walls.some(w => w.x === x && w.y === y) && 
-                !snakes.some(s => s.body.some(b => b.x === x && b.y === y)) &&
-                !items.some(i => i.x === x && i.y === y);
+        valid = !walls.some(w => w.x === x && w.y === y) &&
+            !snakes.some(s => s.body.some(b => b.x === x && b.y === y)) &&
+            !items.some(i => i.x === x && i.y === y);
         attempts++;
     }
     if (valid) {
@@ -435,7 +439,7 @@ function spawnSpecialItem() {
 
 // Trouve la meilleure position de spawn (case la plus eloignee des murs)
 function findBestSpawn() {
-    let bestPos = {x: Math.floor(gridSizeX / 2), y: Math.floor(gridSizeY / 2)};
+    let bestPos = { x: Math.floor(gridSizeX / 2), y: Math.floor(gridSizeY / 2) };
     let bestDist = -1;
     for (let y = 0; y < gridSizeY; y++) {
         for (let x = 0; x < gridSizeX; x++) {
@@ -446,7 +450,7 @@ function findBestSpawn() {
             if (minDist === Infinity) minDist = Math.min(x, gridSizeX - 1 - x, y, gridSizeY - 1 - y);
             if (minDist > bestDist) {
                 bestDist = minDist;
-                bestPos = {x, y};
+                bestPos = { x, y };
             }
         }
     }
@@ -456,9 +460,9 @@ function findBestSpawn() {
 async function initGame() {
     overlay.classList.add('hidden');
     if (gameLoop) clearInterval(gameLoop);
-    
+
     await fetchLayout(terrainSelect.value);
-    
+
     snakes = [];
     items = [];
     score = 0;
@@ -467,7 +471,7 @@ async function initGame() {
     const spawnPos = findBestSpawn();
     snakes.push(new Snake(1, imgs.snake_green, spawnPos.x, spawnPos.y));
     snakes[0].isBot = false;
-    
+
     spawnApple();
     isRunning = true;
     gameLoop = setInterval(update, 120);
@@ -477,12 +481,12 @@ function update() {
     if (!isRunning) return;
 
     snakes.forEach(s => s.update());
-    
+
     // Check collisions
     snakes.forEach(snake => {
         if (!snake.alive) return;
         const head = snake.body[0];
-        
+
         // Item collision
         for (let i = items.length - 1; i >= 0; i--) {
             if (items[i].x === head.x && items[i].y === head.y) {
@@ -503,7 +507,7 @@ function update() {
                 }
             }
         }
-        
+
         // Player collision
         if (!snake.isInvincible) {
             snakes.forEach(other => {
@@ -511,7 +515,7 @@ function update() {
                     if (other.body.some(b => b.x === head.x && b.y === head.y)) {
                         const lenA = snake.body.length + snake.growPending;
                         const lenB = other.body.length + other.growPending;
-                        
+
                         if (lenA > lenB && !other.isInvincible) {
                             // Le plus grand MANGE le plus petit !
                             other.alive = false;
@@ -526,9 +530,9 @@ function update() {
             });
         }
     });
-    
+
     draw();
-    
+
     if (snakes.every(s => !s.alive)) {
         isRunning = false;
         clearInterval(gameLoop);
@@ -539,11 +543,11 @@ function update() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     walls.forEach(w => {
         ctx.drawImage(imgs.wall, w.x * tileSizeX, w.y * tileSizeY, tileSizeX, tileSizeY);
     });
-    
+
     items.forEach(i => i.draw(ctx));
     snakes.forEach(s => s.draw(ctx));
 
@@ -569,17 +573,19 @@ document.addEventListener('keydown', (e) => {
 
     if (!isRunning) return;
     const s1 = snakes[0];
-    
+
     if (s1 && !s1.isBot) {
         let reqDir = null;
-        if (e.key === 'ArrowUp')    reqDir = s1.isPoisoned ? Direction.DOWN : Direction.UP;
-        if (e.key === 'ArrowDown')  reqDir = s1.isPoisoned ? Direction.UP : Direction.DOWN;
-        if (e.key === 'ArrowLeft')  reqDir = s1.isPoisoned ? Direction.RIGHT : Direction.LEFT;
+        if (e.key === 'ArrowUp') reqDir = s1.isPoisoned ? Direction.DOWN : Direction.UP;
+        if (e.key === 'ArrowDown') reqDir = s1.isPoisoned ? Direction.UP : Direction.DOWN;
+        if (e.key === 'ArrowLeft') reqDir = s1.isPoisoned ? Direction.RIGHT : Direction.LEFT;
         if (e.key === 'ArrowRight') reqDir = s1.isPoisoned ? Direction.LEFT : Direction.RIGHT;
 
         if (reqDir !== null) {
-            const opp = { [Direction.UP]: Direction.DOWN, [Direction.DOWN]: Direction.UP,
-                          [Direction.LEFT]: Direction.RIGHT, [Direction.RIGHT]: Direction.LEFT };
+            const opp = {
+                [Direction.UP]: Direction.DOWN, [Direction.DOWN]: Direction.UP,
+                [Direction.LEFT]: Direction.RIGHT, [Direction.RIGHT]: Direction.LEFT
+            };
             // On empêche le demi-tour mortel classique
             if (s1.direction !== opp[reqDir]) {
                 s1.nextDirection = reqDir;
