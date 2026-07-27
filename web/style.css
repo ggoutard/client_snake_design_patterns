@@ -1,0 +1,663 @@
+:root {
+    --apple-bg: #fbfbfd;
+    --apple-surface: #ffffff;
+    --apple-text: #1d1d1f;
+    --apple-text-secondary: #86868b;
+    --apple-border: #d2d2d7;
+    --apple-blue: #0071e3;
+    --apple-blue-hover: #0077ed;
+    --apple-shadow: rgba(0, 0, 0, 0.08) 0px 4px 24px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+}
+
+/* -------------------------------------------
+   DARK MODE : DOCUMENTATION (index.html)
+------------------------------------------- */
+.doc-dark-mode {
+    background-color: #000000;
+    color: #e5e5ea;
+}
+
+.hero-fade {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #000000;
+    position: relative;
+}
+
+.fade-in-logo {
+    max-width: 80%;
+    max-height: 400px;
+    opacity: 0;
+    animation: fadeInLogo 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    filter: drop-shadow(0 0 40px rgba(96, 165, 250, 0.3));
+}
+
+@keyframes fadeInLogo {
+    0% { opacity: 0; transform: scale(0.9); filter: blur(10px); }
+    100% { opacity: 1; transform: scale(1); filter: blur(0px); }
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    color: #636366;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.3; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-5px); }
+    100% { opacity: 0.3; transform: translateY(0); }
+}
+
+.architecture-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.section-header h2 {
+    font-size: 3rem;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+.section-header p {
+    font-size: 1.25rem;
+    color: #a1a1a6;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.doc-block {
+    margin-bottom: 4rem;
+    padding-bottom: 4rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.doc-block h3 {
+    font-size: 2rem;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.block-content p {
+    font-size: 1.15rem;
+    color: #d1d1d6;
+    margin-bottom: 1rem;
+}
+
+.block-content ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    color: #d1d1d6;
+    font-size: 1.1rem;
+}
+
+.block-content li {
+    margin-bottom: 0.5rem;
+}
+
+.block-content code {
+    background: #1c1c1e;
+    color: #60a5fa;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 1rem;
+}
+
+.cta-container {
+    text-align: center;
+    padding: 6rem 0;
+    background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1), transparent 70%);
+}
+
+.cta-container h3 {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.cta-container p {
+    font-size: 1.1rem;
+    color: #a1a1a6;
+    max-width: 600px;
+    margin: 0 auto 3rem auto;
+}
+
+.btn-large {
+    display: inline-block;
+    background: #ffffff;
+    color: #000000;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 1.2rem 3rem;
+    border-radius: 40px;
+    text-decoration: none;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.btn-large:hover {
+    transform: scale(1.05);
+    background: #f5f5f7;
+}
+
+/* -------------------------------------------
+   LIGHT MODE : SIMULATEUR (simulator.html)
+------------------------------------------- */
+.sim-light-mode {
+    background-color: var(--apple-bg);
+    color: var(--apple-text);
+}
+
+.nav-bar {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--apple-border);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.back-link {
+    color: var(--apple-blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.nav-bar h1 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.simulator-only {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+}
+
+.simulator-pane {
+    background: var(--apple-surface);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: var(--apple-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--apple-text-secondary);
+}
+
+select, button {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--apple-border);
+    background: var(--apple-bg);
+    outline: none;
+}
+
+button.btn-primary {
+    background-color: var(--apple-blue);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+button.btn-primary:hover {
+    background-color: var(--apple-blue-hover);
+}
+
+.canvas-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1/1;
+    background-color: #f5f5f7;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--apple-border);
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.hidden {
+    display: none;
+}
+
+.keyboard-hints {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--apple-text-secondary);
+    background: var(--apple-bg);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+/* -------------------------------------------
+   DARK MODE PIXEL : SIMULATEUR
+------------------------------------------- */
+.sim-dark-pixel {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Press Start 2P', monospace; /* Optionnel si importé, sinon fallback monospace */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.nav-bar-pixel {
+    background: #111;
+    border-bottom: 2px solid #333;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    font-family: monospace;
+}
+
+.nav-bar-pixel .back-link {
+    color: #4ade80;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.pixel-canvas-wrapper {
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0a0a0a;
+}
+
+canvas {
+    image-rendering: pixelated; /* Force le rendu pixel art */
+    border: 4px solid #333;
+    max-width: 90vw;
+    max-height: 90vh;
+    background: #000;
+}
+
+#score-display {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #1d4ed8; /* Bleu pour ne pas confondre avec le terrain/les murs */
+    border: 2px solid #fff;
+    color: #fff;
+    padding: 10px 15px;
+    font-family: inherit;
+    font-size: 14px;
+    z-index: 10;
+}
+
+.pixel-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100; /* Permet de cacher le score quand le menu est ouvert */
+}
+
+.pixel-overlay.hidden {
+    display: none;
+}
+
+.pixel-menu {
+    background: #000;
+    border: 4px solid #fff;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+    min-width: 300px;
+    font-family: monospace;
+}
+
+.pixel-menu h2 {
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.pixel-menu label {
+    font-size: 1rem;
+    color: #aaa;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.pixel-menu select {
+    width: 100%;
+    padding: 0.5rem;
+    background: #111;
+    color: #fff;
+    border: 2px solid #555;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.btn-pixel {
+    margin-top: 1rem;
+    background: #4ade80;
+    color: #000;
+    border: 4px solid #fff;
+    padding: 1rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+    cursor: pointer;
+    font-family: inherit;
+    text-transform: uppercase;
+}
+
+.btn-pixel:hover {
+    background: #22c55e;
+}
+
+/* -------------------------------------------
+   DIAGRAMME D'ARCHITECTURE TECHNIQUE
+------------------------------------------- */
+.arch-diagram-section {
+    padding: 4rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 4rem;
+}
+
+.arch-diagram-section > h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #636366;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 2.5rem;
+}
+
+.arch-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    font-family: 'Inter', monospace;
+    position: relative;
+}
+
+/* Couches */
+.arch-layer {
+    border-radius: 14px;
+    padding: 1.2rem 1.5rem;
+    position: relative;
+    border: 1px solid transparent;
+}
+
+.arch-layer-label {
+    position: absolute;
+    top: -11px;
+    left: 20px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    background: #000;
+}
+
+/* COUCHE SERVEUR */
+.layer-server {
+    background: rgba(239, 68, 68, 0.07);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+.layer-server .arch-layer-label {
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* COUCHE RÉSEAU */
+.layer-network {
+    margin: 0.6rem 2rem;
+    background: rgba(251, 191, 36, 0.05);
+    border-color: rgba(251, 191, 36, 0.3);
+    border-style: dashed;
+}
+.layer-network .arch-layer-label {
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.4);
+}
+
+/* COUCHE CLIENT MVC */
+.layer-client {
+    background: rgba(59, 130, 246, 0.07);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+.layer-client .arch-layer-label {
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+/* COUCHE PATTERNS */
+.layer-patterns {
+    margin: 0.6rem 1rem;
+    background: rgba(139, 92, 246, 0.07);
+    border-color: rgba(139, 92, 246, 0.25);
+}
+.layer-patterns .arch-layer-label {
+    color: #a78bfa;
+    border: 1px solid rgba(139, 92, 246, 0.4);
+}
+
+/* Grille de modules dans une couche */
+.arch-modules {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+    align-items: stretch;
+}
+
+.arch-module {
+    flex: 1;
+    min-width: 130px;
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    border: 1px solid;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.arch-module:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+.arch-module-icon {
+    font-size: 1.1rem;
+    margin-bottom: 0.2rem;
+}
+
+.arch-module-name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: monospace;
+    color: #e5e5ea;
+    line-height: 1.2;
+}
+
+.arch-module-desc {
+    font-size: 0.62rem;
+    color: #636366;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.4;
+}
+
+.arch-module-badge {
+    display: inline-block;
+    margin-top: 0.4rem;
+    font-size: 0.55rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    align-self: flex-start;
+}
+
+/* Couleurs des modules par couche */
+.mod-red    { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.25); }
+.mod-yellow { background: rgba(251,191,36,0.1);  border-color: rgba(251,191,36,0.25); }
+.mod-blue   { background: rgba(59,130,246,0.1);  border-color: rgba(59,130,246,0.25); }
+.mod-purple { background: rgba(139,92,246,0.1);  border-color: rgba(139,92,246,0.25); }
+.mod-green  { background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.25); }
+.mod-teal   { background: rgba(20,184,166,0.08); border-color: rgba(20,184,166,0.25); }
+
+.badge-red    { background: rgba(239,68,68,0.25);   color: #f87171; }
+.badge-yellow { background: rgba(251,191,36,0.25);  color: #fcd34d; }
+.badge-blue   { background: rgba(59,130,246,0.25);  color: #93c5fd; }
+.badge-purple { background: rgba(139,92,246,0.25);  color: #c4b5fd; }
+.badge-green  { background: rgba(74,222,128,0.2);   color: #86efac; }
+.badge-teal   { background: rgba(20,184,166,0.2);   color: #5eead4; }
+
+/* Flèches de connexion entre couches */
+.arch-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.5rem 0;
+    position: relative;
+}
+
+.arch-arrow-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.arch-arrow-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.arrow-up { color: #636366; font-size: 0.9rem; animation: pulse-arrow 1.5s infinite; }
+.arrow-down { color: #636366; font-size: 0.9rem; animation: pulse-arrow 1.5s infinite 0.75s; }
+
+@keyframes pulse-arrow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+.arrow-tcp   { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.arrow-json  { background: rgba(74,222,128,0.1);  color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+.arrow-evt   { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.3); }
+
+/* Légende */
+.arch-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    justify-content: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.65rem;
+    color: #636366;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+

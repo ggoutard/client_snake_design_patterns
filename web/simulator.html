@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur Web - Client Snake</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body class="sim-dark-pixel">
+    <nav class="nav-bar-pixel">
+        <a href="../index.html" class="back-link">← Retour Architecture</a>
+        <span>Appuyez sur [ECHAP] pour ouvrir le Menu</span>
+    </nav>
+
+    <div class="pixel-canvas-wrapper">
+        <div id="score-display">SCORE : 0</div>
+        <canvas id="gameCanvas" width="600" height="600"></canvas>
+        
+        <div id="game-overlay" class="pixel-overlay">
+            <div class="pixel-menu">
+                <h2>--- MENU ---</h2>
+                
+                <div class="control-group">
+                    <label for="terrain-select">Chargement du Terrain (.lay)</label>
+                    <select id="terrain-select">
+                        <option value="arena">Arena (Standard)</option>
+                        <option value="arenaNoWall">Arena (Sans Murs)</option>
+                        <option value="alone">Alone</option>
+                        <option value="small">Small</option>
+                        <option value="smallArena">Small Arena</option>
+                    </select>
+                </div>
+                
+                <button id="btn-start" class="btn-pixel">JOUER</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

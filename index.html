@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture - Projet Snake</title>
+    <link rel="stylesheet" href="web/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="doc-dark-mode">
+
+    <!-- Section Intro avec Fondu au Noir -->
+    <section class="hero-fade">
+        <img src="images/titre.png" alt="Projet Snake" class="fade-in-logo">
+        <div class="scroll-indicator">↓ Decouvrir l'Architecture ↓</div>
+    </section>
+
+    <!-- Corps de la Documentation -->
+    <main class="architecture-content">
+
+        <header class="section-header">
+            <h2>Vision Architecturale Globale</h2>
+            <p>Plus qu'un simple jeu, ce projet est une véritable <strong>démonstration d'Ingénierie
+                    Logicielle</strong>. Conçu comme un Client lourd (JavaFX/Swing) au sein d'une architecture
+                distribuée Client/Serveur, chaque ligne de code respecte rigoureusement le découplage MVC et les
+                principes fondamentaux de la programmation orientée objet.</p>
+        </header>
+
+        <article class="doc-block">
+            <h3>1. Modèle-Vue-Contrôleur (MVC) & Réseau Asynchrone</h3>
+            <div class="block-content">
+                <p>Le cœur du système repose sur une séparation hermétique des responsabilités. Le Client ne calcule
+                    jamais l'état physique du monde ; il est un terminal d'affichage intelligent qui délègue la logique
+                    métier au Serveur via des <strong>Sockets TCP</strong>.</p>
+                <ul>
+                    <li><strong>Désérialisation JSON Haute Performance :</strong> L'état complet du plateau est transmis
+                        sous forme de DTO (<code>PanelBuilder</code>) et interprété en temps réel.</li>
+                    <li><strong>Multithreading I/O :</strong> L'écoute réseau (ThreadInput/Output) est totalement
+                        asynchrone. L'interface utilisateur ne freeze jamais, garantissant une réactivité maximale, même
+                        en attente du signal serveur (<i>"Game start"</i>).</li>
+                </ul>
+            </div>
+        </article>
+
+        <article class="doc-block">
+            <h3>2. Patron Fabrique (Factory Method)</h3>
+            <div class="block-content">
+                <p>Pour garantir une évolutivité sans faille (principe <strong>Open/Closed</strong> de SOLID),
+                    l'instanciation des entités est strictement isolée dans le package
+                    <code>gameElement/fabrique/</code>.</p>
+                <p>Lorsqu'un niveau (<code>.lay</code>) est chargé, l'application ne fait appel à aucun <code>new</code>
+                    sauvage. Elle invoque dynamiquement <code>FabriqueSnake</code> et <code>FabriqueItem</code>. Si de
+                    nouveaux objets, malus ou types de serpents doivent être ajoutés demain, le moteur central n'a pas à
+                    être recompilé : l'usine s'adapte.</p>
+            </div>
+        </article>
+
+        <article class="doc-block">
+            <h3>3. Patron Stratégie (Strategy Pattern)</h3>
+            <div class="block-content">
+                <p>Le déplacement n'est plus une simple fonction codée en dur, c'est une <strong>stratégie
+                        interchangeable à chaud</strong> (dans <code>movement/strategie/</code>). L'interface
+                    <code>Movement</code> est implémentée de multiples façons :</p>
+                <ul>
+                    <li><code>HumanMovement</code> : Capte et fluidifie les événements clavier non-bloquants.</li>
+                    <li><code>AiMovement</code> : Délègue la navigation à un algorithme autonome de pathfinding (BFS
+                        temporel).</li>
+                    <li><strong>Tactiques Avancées :</strong> Des modules comme <code>ModeAttaque</code> et
+                        <code>ModeDefense</code> s'injectent dynamiquement, permettant à une IA de changer radicalement
+                        de comportement en pleine partie sans jamais détruire ou recréer l'entité.</li>
+                </ul>
+            </div>
+        </article>
+
+        <article class="doc-block">
+            <h3>4. Patron État (State Pattern)</h3>
+            <div class="block-content">
+                <p>Fini les interminables boucles conditionnelles <code>if (isPaused)</code>. Situé dans le package
+                    <code>etat/</code>, ce design pattern encapsule le flux temporel du moteur. Chaque phase de jeu
+                    (<code>EtatPause</code>, <code>EtatRunning</code>, <code>EtatGameOver</code>) est un objet
+                    indépendant qui dicte ses propres règles d'exécution, rendant le cycle de vie du jeu extrêmement
+                    robuste.</p>
+            </div>
+        </article>
+
+        <article class="doc-block">
+            <h3>5. Patron Observateur (Observer Pattern)</h3>
+            <div class="block-content">
+                <p>Le Graal du couplage faible. Utilisant <code>java.util.Observer</code>, la Vue ignore totalement
+                    l'existence du Modèle. Dès qu'une trame réseau modifie un Objet ou déplace un joueur, le Modèle émet
+                    une notification. Le Contrôleur intercepte, traite, et ordonne à la Vue de se rafraîchir en cascade.
+                    <strong>C'est la donnée qui pousse l'interface, l'interface ne tire jamais la donnée.</strong></p>
+            </div>
+        </article>
+
+        <!-- CTA : Simulateur -->
+        <div class="cta-container">
+            <h3>Démonstration Visuelle Technique</h3>
+            <p>Pour vous permettre de visualiser concrètement l'impact de ces patterns (parseur de cartes asynchrone,
+                boucle de rendu découplée, mécaniques de Gameplay), nous avons compilé une maquette technique
+                interactive de ce client en pur JS, directement exécutable dans le navigateur.</p>
+            <a href="web/simulator.html" class="btn-large">Lancer la Simulation Interactive</a>
+        </div>
+
+    </main>
+</body>
+
+</html>
