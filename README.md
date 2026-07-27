@@ -4,6 +4,8 @@ Ce depot contient l'application Client d'une architecture Client/Serveur concue 
 
 Vous pouvez tester l'emulateur interactif directement dans le navigateur (aucune installation Java requise) :
 
+[TESTER LA DEMONSTRATION WEB ICI](http://localhost:5500/client_snake_design_patterns/)
+
 ---
 
 ## Vue d'ensemble de l'Architecture
