@@ -374,7 +374,9 @@ async function fetchLayout(layoutName) {
         console.error("Erreur de chargement du layout, fallback...", e);
         gridSizeX = 20; gridSizeY = 20;
         walls = []; spawns = [{ x: 5, y: 5 }, { x: 15, y: 15 }];
-        tileSizeX = canvas.width / gridSizeX; tileSizeY = canvas.height / gridSizeY;
+        const size = Math.min(600 / gridSizeX, 600 / gridSizeY);
+        tileSizeX = size; tileSizeY = size;
+        canvas.width = size * gridSizeX; canvas.height = size * gridSizeY;
     }
 }
 
@@ -382,8 +384,11 @@ function parseLayout(text) {
     const lines = text.split('\n').map(l => l.replace('\r', '')).filter(l => l.length > 0);
     gridSizeY = lines.length;
     gridSizeX = Math.max(...lines.map(l => l.length));
-    tileSizeX = canvas.width / gridSizeX;
-    tileSizeY = canvas.height / gridSizeY;
+    const size = Math.min(600 / gridSizeX, 600 / gridSizeY);
+    tileSizeX = size;
+    tileSizeY = size;
+    canvas.width = size * gridSizeX;
+    canvas.height = size * gridSizeY;
 
     walls = [];
     spawns = [];
