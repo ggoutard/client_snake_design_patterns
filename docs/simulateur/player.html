@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulateur</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+  body { font: 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; color: #c9ced8; }
+  #app { position: absolute; inset: 0; }
+
+  .overlay {
+    position: absolute; inset: 0; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    background: #000; text-align: center; padding: 16px;
+  }
+  .overlay[hidden] { display: none; }
+  .overlay p { margin: 0; }
+  .label { color: #e6e9ef; }
+  .detail { color: #7d8594; font-variant-numeric: tabular-nums; min-height: 1.4em; }
+  .bar { width: min(280px, 70%); height: 3px; border-radius: 2px; background: #22262e; overflow: hidden; }
+  .bar[hidden] { display: none; }
+  .fill { height: 100%; width: 0; background: #e6e9ef; transition: width .2s ease; }
+  .bar.busy .fill { width: 30%; animation: busy 1.1s ease-in-out infinite; }
+  @keyframes busy { from { transform: translateX(-100%); } to { transform: translateX(340%); } }
+  @media (prefers-reduced-motion: reduce) { .bar.busy .fill { animation: none; width: 100%; opacity: .4; } }
+  .overlay button, .menu button {
+    font: inherit; color: #e6e9ef; background: #1b1f27; border: 1px solid #2c323d;
+    border-radius: 6px; padding: 6px 14px; cursor: pointer;
+  }
+  .overlay button:hover, .menu button:hover { background: #262b35; }
+
+  /* Options: a discreet button, visible when the pointer is over the frame. */
+  .options { position: absolute; top: 8px; right: 8px; z-index: 3; }
+  .options[hidden] { display: none; }
+  .toggle {
+    width: 30px; height: 30px; border-radius: 15px; border: 0; padding: 0;
+    display: grid; place-items: center; cursor: pointer;
+    background: rgba(20, 23, 30, .75); color: #e6e9ef;
+    opacity: 0; transition: opacity .15s ease;
+  }
+  body:hover .toggle, .toggle:focus-visible, .toggle[aria-expanded="true"] { opacity: 1; }
+  @media (hover: none) { .toggle { opacity: .8; } }
+  .menu {
+    position: absolute; right: 0; top: 38px; width: 220px; padding: 12px;
+    background: #12151b; border: 1px solid #2c323d; border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+  }
+  .menu[hidden] { display: none; }
+  .menu h2 { margin: 0 0 6px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #7d8594; }
+  .menu h2:not(:first-child) { margin-top: 12px; }
+  .seg { display: flex; flex-wrap: wrap; gap: 4px; }
+  .seg button { padding: 4px 9px; font-size: 12px; }
+  .seg button[aria-pressed="true"] { background: #e6e9ef; color: #000; border-color: #e6e9ef; }
+  .legal { display: block; margin-top: 12px; font-size: 12px; color: #7d8594; }
+  .legal:hover { color: #e6e9ef; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<div class="overlay" id="overlay">
+  <p class="label" id="label">Chargement…</p>
+  <div class="bar busy" id="bar"><div class="fill" id="fill"></div></div>
+  <p class="detail" id="detail"></p>
+  <button id="relaunch" hidden>Relancer</button>
+</div>
+
+<div class="options" id="options">
+  <button class="toggle" id="toggle" aria-label="Options" aria-expanded="false" aria-controls="menu">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>
+      <circle cx="9" cy="6" r="2" fill="#000"/><circle cx="15" cy="12" r="2" fill="#000"/><circle cx="8" cy="18" r="2" fill="#000"/>
+    </svg>
+  </button>
+  <div class="menu" id="menu" hidden>
+    <h2>Format de la fenêtre</h2>
+    <div class="seg" id="ratio"></div>
+    <h2>Clavier</h2>
+    <div class="seg" id="keyboard"></div>
+    <a class="legal" href="../licenses/NOTICE.txt" target="_blank" rel="noopener">Licences et sources</a>
+  </div>
+</div>
+
+<script type="module" src="player.js"></script>
+</body>
+</html>

@@ -5,38 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulateur Web - Client Snake</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        .nav-bar-pixel { gap: 1rem; flex-wrap: wrap; }
+        .java-badge {
+            color: #fff; border: 1px solid #fff; border-radius: 999px;
+            padding: 0.2rem 0.7rem; white-space: nowrap;
+        }
+        .nav-link { color: #fff; text-decoration: none; text-transform: uppercase; }
+        .nav-link:hover { text-decoration: underline; }
+        .btn-fullscreen {
+            background: none; color: #fff; border: 1px solid #fff; border-radius: 999px;
+            padding: 0.2rem 0.8rem; font: inherit; cursor: pointer;
+        }
+        .btn-fullscreen:hover { background: #fff; color: #000; }
+        .java-frame { flex-grow: 1; min-height: 0; }
+        .java-frame iframe { display: block; width: 100%; height: 100%; border: 0; background: #000; }
+    </style>
 </head>
 <body class="sim-dark-pixel">
     <nav class="nav-bar-pixel">
         <a href="index.html" class="back-link">← Retour Architecture</a>
-        <span>Appuyez sur [ECHAP] pour ouvrir le Menu</span>
+        <span class="java-badge">Java embarqué · vraie JVM dans le navigateur</span>
+        <a href="mailto:contact.ggoutard@gmail.com" class="nav-link" title="contact.ggoutard@gmail.com">Contact</a>
+        <a href="licenses/NOTICE.txt" class="nav-link" title="Licences de la machine virtuelle embarquée">Licences</a>
+        <button type="button" id="fullscreen" class="btn-fullscreen" title="Afficher la simulation en plein écran">⛶ Plein écran</button>
     </nav>
 
-    <div class="pixel-canvas-wrapper">
-        <div id="score-display">SCORE : 0</div>
-        <canvas id="gameCanvas" width="600" height="600"></canvas>
-        
-        <div id="game-overlay" class="pixel-overlay">
-            <div class="pixel-menu">
-                <h2>--- MENU ---</h2>
-                
-                <div class="control-group">
-                    <label for="terrain-select">Chargement du Terrain (.lay)</label>
-                    <select id="terrain-select">
-                        <option value="arena">Arena (Standard)</option>
-                        <option value="arenaNoWall">Arena (Sans Murs)</option>
-                        <option value="alone">Alone</option>
-                        <option value="small">Small</option>
-                        <option value="smallArena">Small Arena</option>
-                    </select>
-                </div>
-                
-                <button id="btn-start" class="btn-pixel">JOUER</button>
-            </div>
-        </div>
+    <div class="java-frame" id="frame">
+        <iframe id="player" title="Snake (Java embarqué)" allow="fullscreen"></iframe>
     </div>
 
-    <script src="app.js"></script>
+    <script>
+        // Simulateur (dossier simulateur/) et le jeu compilé (app/snake.jar, construit par web/build-jar.sh).
+        const player = document.getElementById("player");
+        player.src = "simulateur/player.html?catalog=../app/apps.json&app=snake&ratio=auto&keyboard=auto&options=0";
+        player.addEventListener("load", () => player.focus());
+
+        // Plein écran : le jeu occupe tout l'écran (Échap pour revenir).
+        document.getElementById("fullscreen").addEventListener("click", () => {
+            document.getElementById("frame").requestFullscreen().then(() => player.focus()).catch(() => {});
+        });
+    </script>
 </body>
 </html>

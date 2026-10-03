@@ -1,0 +1,18 @@
+{
+  "state": "image/state-6a3bec039b.bin.zst",
+  "preloaded": "notepad",
+  "state_size": 32868202,
+  "cdrom": {
+    "url": "image/cdrom-0a4945eec8/java.iso.zst",
+    "size": 187695104,
+    "chunk": 1048576
+  },
+  "screen": {
+    "width": 1024,
+    "height": 768
+  },
+  "hardware": {
+    "memory_size": 268435456,
+    "vga_memory_size": 8388608
+  }
+}

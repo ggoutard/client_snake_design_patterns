@@ -682,3 +682,12 @@ canvas {
     flex-shrink: 0;
 }
 
+
+/* Pied de page : contact */
+.site-footer {
+    text-align: center;
+    padding: 2rem 1rem 3rem;
+    color: #86868b;
+    font-size: 0.95rem;
+}
+.site-footer a { color: inherit; text-decoration: underline; }
